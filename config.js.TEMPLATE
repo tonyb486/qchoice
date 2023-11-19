@@ -1,0 +1,8 @@
+
+module.exports = {
+	channels: ["#channel"], // Channel list
+	server: "irc.example.org", // Servger name
+	nick: "qchoice", // Nickname (bot will only respond to qchoice though)
+	api_key: "PUT_API_KEY_HERE" // Key from https://quantumnumbers.anu.edu.au/
+};
+

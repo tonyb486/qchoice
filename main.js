@@ -2,14 +2,11 @@
 const QChooser = require("./qchooser")
 const irc = require("irc");
 
-const config = {
-	channels: ["#tonytest"],
-	server: "irc.slashnet.org",
-	nick: "qchoice"
-};
+// Load configuration
+const config = require("./config")
 
 // Randomness source
-qc = new QChooser()
+qc = new QChooser(config.api_key)
 
 // IRC Cient
 var bot = new irc.Client(config.server, config.nick, {
@@ -62,7 +59,7 @@ bot.addListener("message", async function(from, to, text, message) {
 
             // Help
             if (choices[0] == "entropy") {
-                bot.say(to, from+": I get my randomness from https://qrng.anu.edu.au/ :)")
+                bot.say(to, from+": I get my randomness from https://quantumnumbers.anu.edu.au/ :)")
                 return
             }
             

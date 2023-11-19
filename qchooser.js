@@ -2,9 +2,10 @@
 class QChooser {
     
     // Start with an empty entropy pool
-    constructor() {
+    constructor(api_key) {
         this.randPool = []
         this.updated = false;
+        this.api_key = api_key;
     }
 
     // Update the pool from the qrng.anu.edu.au API
@@ -13,15 +14,22 @@ class QChooser {
         this.randPool = []
 
         var count = 0;
-        var maxTries = 10;
+        var maxTries = 5;
 
         // This might take some retries, the API is limited to once per 60 seconds
-        // We'll pull 100 bytes at a time, realistically this should be plenty
+        // We'll pull 1024 bytes at a time, realistically this should be plenty
         while( this.randPool.length == 0) {
 
             try {
                 console.log("Refreshing entropy pool...")
-                const randData = await fetch("https://qrng.anu.edu.au/API/jsonI.php?length=100&type=uint8")
+
+                //Old unauthenticated API may be shut down some day
+                //const randData = await fetch("https://qrng.anu.edu.au/API/jsonI.php?length=100&type=uint8")
+
+                // Pull a lot of bytes because we are limited to 100 req/month
+                const randData = await fetch("https://api.quantumnumbers.anu.edu.au/?length=1024&type=uint8", 
+                                    { headers: {"x-api-key": this.api_key}})
+
                 this.randPool = (await randData.json())["data"]
                 this.updated = Date.now()
                 console.log("Pool Updated!")
@@ -81,4 +89,3 @@ class QChooser {
 }
 
 module.exports = QChooser
-
