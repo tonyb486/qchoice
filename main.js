@@ -10,8 +10,14 @@ qc = new QChooser(config.api_key)
 
 // IRC Cient
 var bot = new irc.Client(config.server, config.nick, {
-	channels: config.channels
+	channels: config.channels,
+    userName: config.username
 });
+
+// Set +B
+bot.addListener("registered", function() {
+    bot.send("MODE", config.nick, "+B")
+})
 
 // Listen for choice requests
 bot.addListener("message", async function(from, to, text, message) {
@@ -22,8 +28,12 @@ bot.addListener("message", async function(from, to, text, message) {
         if(!config.channels.includes(to))
             return
 
+        // Ignore known bots
+        if(config.ignore.includes(from.toLowerCase()))
+            return
+
         // Match requests ending in a question mark
-        const request = text.match(/qchoice: ([\p{Letter}\d, ]+)\?/u)
+        const request = text.match(/^qchoice: ([\p{Letter}\d, ]+)\?$/u)
         if(!request) 
             return
 

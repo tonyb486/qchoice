@@ -4,5 +4,7 @@ module.exports = {
 	server: "irc.example.org", // Servger name
 	nick: "qchoice", // Nickname (bot will only respond to qchoice though)
 	api_key: "PUT_API_KEY_HERE" // Key from https://quantumnumbers.anu.edu.au/
+	ignore: ["botname"], // lowercase bot names
+    username: "qchoice" // irc username
 };
 
